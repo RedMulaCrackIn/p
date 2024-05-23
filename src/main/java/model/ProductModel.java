@@ -120,14 +120,33 @@ public class ProductModel {
 		PreparedStatement preparedStatement2 = null;
 
 		Collection<ProductBean> products = new LinkedList<ProductBean>();
+		
+		
+		/* 
+		 * 	String from = "SELECT * FROM ";
+			String w = " WHERE deleted = 'false' AND nomeTipologia = '"; 
+			
+			
+			String selectSQL2 = from + ProductModel.TABLE_NAME + w + where + "'";
+			
+			StringBuilder str = new StringBuilder();
+			str.append(from);
+			str.append(w);
+			str.append(selectSQL2);
+			
+			String selectSQL = str.toString();
+		 */
 
-		String selectSQL = "SELECT * FROM " + ProductModel.TABLE_NAME + " WHERE deleted = 'false' AND nomeTipologia = '" + where + "'";
+		String selectSQL = "SELECT * FROM " + ProductModel.TABLE_NAME + " WHERE deleted = ? AND nomeTipologia = '" + where + "'";
+		
 		String sql2 = "SELECT AVG(votazione) FROM Recensione WHERE codiceProdotto = ?";
 		
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
+			
 			preparedStatement = connection.prepareStatement(selectSQL);
-
+			preparedStatement.setString(1, "false");
+			
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
